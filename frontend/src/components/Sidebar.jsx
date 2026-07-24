@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { RiBarChartHorizontalLine, RiDashboardHorizontalFill, RiArticleLine, RiLightbulbLine, RiPaletteLine, RiSunLine, RiMoonLine, RiCloseLine, RiSettings4Line} from '@remixicon/react'
 
-const Sidebar = () => {
+const Sidebar = ({ navActive, setNavActive }) => {
     const [active, setActive] = useState('dashboard')
     const [theme, setTheme] = useState(localStorage.getItem('theme')? localStorage.getItem('theme'): 'light')
-    const [navActive, setNavActive] = useState('active')
 
     const toggleTheme = () => {
         const newTheme = theme == 'light'? 'dark':'light'
@@ -14,7 +13,7 @@ const Sidebar = () => {
 
   return (
     <>
-        <div className={`h-svh w-full p-7 bg-[#E5E4E2] relative text-[#555555] ${navActive == 'active'? '':'hidden'} lg:w-1/5 lg:px-3 xl:w-1/6 2xl:px-7`}>
+         <div className={`h-svh w-screen p-7 bg-[#E5E4E2] text-[#555555] ${navActive == 'active'? 'block':'hidden'} fixed inset-0 z-50 lg:relative lg:w-1/4 lg:px-3 lg:block xl:w-1/6 2xl:px-6`}>
             <div className="logo flex items-center">
                 <div className=' text-white bg-black rounded-[5px] inline-block py-1.5 px-3'>< RiBarChartHorizontalLine style={{ stroke: 'white', strokeWidth: '1.5px' }}/></div>
                 <span className='text-4xl text-black font-bold ml-3'>Pollo</span>
