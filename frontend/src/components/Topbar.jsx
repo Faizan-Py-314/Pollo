@@ -26,7 +26,7 @@ const Topbar = ({ navActive, setNavActive }) => {
                     <span onClick={toggleTheme} className='hidden items-center justify-center py-2 px-3 border rounded-md cursor-pointer lg:flex'>{theme == 'light'? <RiSunLine />: <RiMoonLine />}</span>
                 </div>
             </div>
-            <div className={` ${ searchActive == 'active'? '':'hidden' } absolute flex items-center w-[90%] -ml-1.25 border mt-15 bg-gray-50 rounded-md md:ml-2 md:mt-18 lg:flex lg:w-70 lg:mt-6 left-8 xl:w-[35%]`}>
+            <div className={` ${ searchActive == 'active'? '':'hidden' } absolute flex items-center w-[90%] -ml-3.25 border mt-15 bg-gray-50 rounded-md md:ml-2 md:mt-18 lg:flex lg:w-70 lg:mt-6 left-8 xl:w-[35%]`}>
                 <span className='w-10 p-2 rounded-md'><RiSearchLine size={20}/></span>
                 <input className='py-2 outline-none [&::-webkit-search-cancel-button]:hidden' type="search" placeholder='Search' />
             </div>
