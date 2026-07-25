@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { RiTimerLine, RiListRadio, RiRadioButtonLine, RiGroupLine } from '@remixicon/react'
+import { RiTimerLine, RiListRadio, RiRadioButtonLine, RiGroupLine, RiChat1Line } from '@remixicon/react'
 import {pollData} from '../api'
 
 import Sidebar from '../components/Sidebar'
@@ -43,10 +43,11 @@ const PollPage = () => {
 
               <div className=' hidden w-full h-12 rounded-md items-center text-sm p-4 justify-between md:text-base lg:text-lg md:p-6 md:flex lg:px-12 lg:pr-20'>
                   <span className='hidden xl:block px-1 text-base  rounded-full font-bold'>#</span>
-                  <h2 className='font-bold w-45'>Poll Topic</h2>
-                  <span className='flex gap-2 items-center font-bold'>Timer</span>
-                  <span className='flex gap-2 items-center font-bold'>Votes</span>
-                  <span className='flex gap-2 items-center font-bold'>Options</span>
+                  <h2 className='font-bold '>Poll Topic</h2>
+                    <span className='flex gap-2 items-center font-bold'>Timer</span>
+                  <span className='flex gap-2 items-center font-bold '>Votes</span>
+                  <span className='flex gap-2 items-center font-bold '>Options</span>
+                  <span className='flex gap-2 items-center font-bold'>Comments</span>
                 </div>
                 
               {polls.map((poll, index) => (
@@ -54,8 +55,9 @@ const PollPage = () => {
                   <span className='hidden xl:block px-1 text-base  rounded-full'>{index+1}</span>
                   <h2 className='font-bold'>{poll.title.length > 15 ? `${poll.title.slice(0, 15)}...` : poll.title}</h2>
                   <span className='flex gap-2 items-center'><span className='hidden lg:block'><RiTimerLine /></span>{formatTime(poll.finished_at)}</span>
-                  <span className='flex gap-2 items-center'><span className='hidden lg:block'><RiGroupLine size={20} /></span>{`12${poll.votes.length}`}</span>
-                  <span className='flex gap-2 items-center'><span className='hidden lg:block'><RiListRadio /></span>{poll.options.length}</span>
+                  <span className='flex gap-1 items-center lg:text-sm bg-green-200 text-xs  p-1 lg:p-1.5 rounded-sm lg:rounded-md'><span className='hidden lg:block'><RiGroupLine size={15} /></span>{`12${poll.votes.length}`}</span>
+                  <span className='flex gap-1 items-center lg:text-sm bg-amber-200 text-xs p-1 px-2 lg:p-1.5 rounded-sm lg:rounded-md'><span className='hidden lg:block'><RiListRadio size={15} /></span>{poll.options.length}</span>
+                  <span className='gap-2 items-center lg:rounded-md hidden md:flex'><span className='hidden lg:block'><RiChat1Line /></span>{poll.options.length}</span>
                 </div>
               ))}
 
