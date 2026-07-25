@@ -1,5 +1,6 @@
 from typing import Annotated
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from datebase import get_db, Base, engine
@@ -33,4 +34,17 @@ def get_polls(db: Annotated[Session, Depends(get_db)]):
     polls = result.scalars().all()
 
     return polls
+
+origins = [
+    'http://localhost:5173',
+    'http://192.168.100.31:5173',
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
