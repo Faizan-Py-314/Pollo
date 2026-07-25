@@ -2,8 +2,12 @@
 
 
 .active{
-  background: white;
+  background: #F6F8F8;  
   color: black;
 }
 
 
+.container{
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}

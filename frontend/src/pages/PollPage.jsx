@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { RiTimerLine, RiListRadio, RiRadioButtonLine, RiGroupLine } from '@remixicon/react'
+
 import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
 
@@ -74,18 +76,27 @@ const PollPage = () => {
     <>
       <div className='flex'>
         <Sidebar navActive={navActive} setNavActive={setNavActive} />
-        <div className='w-full'>
+        <div className='w-full lg:max-w-[1600px] mx-auto bg-[#F6F8F8]'>
           <Topbar navActive={navActive} setNavActive={setNavActive} />
           <div className='px-5 py-3 lg:ml-4'>
-            <h1 className='text-4xl font-bold'>Poll's</h1>
-            <div className='w-full container flex flex-col justify-center mt-3 gap-4 p-2'>
+            <h1 className='text-4xl font-bold'>Polls</h1>
+            <div className='w-full container flex flex-col  mt-3 gap-4 p-2 h-[75vh] overflow-auto lg:gap-6 [@media(min-height:900px)]:h-[81vh]'>
+
+              <div className=' hidden w-full h-12 rounded-md items-center text-sm p-4 justify-between md:text-base lg:text-lg md:p-6 md:flex lg:px-12 lg:pr-20'>
+                  <span className='hidden xl:block px-1 text-base  rounded-full font-bold'>#</span>
+                  <h2 className='font-bold w-45'>Poll Topic</h2>
+                  <span className='flex gap-2 items-center font-bold'>Timer</span>
+                  <span className='flex gap-2 items-center font-bold'>Votes</span>
+                  <span className='flex gap-2 items-center font-bold'>Options</span>
+                </div>
+                
               {pollsData.map((poll, index) => (
-                <div key={index} className='w-full h-12 border rounded-md flex items-center text-sm p-4 justify-between text-start md:text-base md:p-6 lg:px-8'>
-                  <span className='hidden xl:block'>{index}</span>
+                <div key={index} className='bg-[#FFFFFF] hover:bg-gray-100 cursor-pointer w-full h-12 shadow-md rounded-md flex items-center text-sm p-4 justify-between text-start md:text-base lg:text-lg md:p-6 lg:p-8 lg:px-12 lg:pr-20'>
+                  <span className='hidden xl:block px-1 text-base  rounded-full'>{index+1}</span>
                   <h2 className='font-bold'>{poll.title.length > 15 ? `${poll.title.slice(0, 15)}...` : poll.title}</h2>
-                  <span>{poll.Timer}</span>
-                  <span>{poll.votes}</span>
-                  <span>{poll.options}</span>
+                  <span className='flex gap-2 items-center'><span className='hidden lg:block'><RiTimerLine /></span> {poll.Timer}</span>
+                  <span className='flex gap-2 items-center'><span className='hidden lg:block'><RiGroupLine size={20} /></span>{poll.votes}</span>
+                  <span className='flex gap-2 items-center'><span className='hidden lg:block'><RiListRadio /></span>{poll.options}</span>
                 </div>
               ))}
 
