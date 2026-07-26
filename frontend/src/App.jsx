@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import PollListPage from './pages/PollsListPage'
 import PollPage from './pages/PollPage'
 
 function App() {
@@ -7,7 +8,8 @@ function App() {
 
   return (
     <>
-      <PollPage />
+      {/* <PollListPage /> */}
+      <PollPage/>
     </>
   )
 }
