@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { RiBarChartHorizontalLine, RiDashboardHorizontalFill, RiArticleLine, RiLightbulbLine, RiPaletteLine, RiSunLine, RiMoonLine, RiCloseLine, RiSettings4Line} from '@remixicon/react'
 
 const Sidebar = ({ navActive, setNavActive }) => {
@@ -22,30 +23,30 @@ const Sidebar = ({ navActive, setNavActive }) => {
 
             <ul className='mt-10 flex flex-col gap-2 relative h-[88%] [@media(min-height:800px)]:h-[90%]'>
                 <li className={` ${active == 'dashboard'? 'active':''} py-2 px-3 rounded-xl hover:bg-[#F6F8F8]`} onClick={()=> setActive('dashboard')}>
-                    <a href="#">
+                    <a onClick={()=> setNavActive(null)} href="#">
                         <div className='flex gap-3 text-lg items-center'>
                             <RiDashboardHorizontalFill />Dashboard
                         </div>
                     </a>
                 </li>
                 <li className={` ${active == 'polls'? 'active': ''} py-2 px-3 rounded-xl hover:bg-[#F6F8F8]`} onClick={()=> setActive('polls')}>
-                    <a className='flex items-center justify-between' href="#">
+                    <Link onClick={()=> setNavActive(null)} className='flex items-center justify-between' to="/poll">
                         <div className='flex gap-3 text-lg items-center'>
                             < RiBarChartHorizontalLine />Poll's
                         </div>
                         <span>0</span>
-                    </a>
+                    </Link>
                 </li>
                 <li className={` ${active == 'result'? 'active':''} py-2 px-3 rounded-xl hover:bg-[#F6F8F8]`} onClick={()=> setActive('result')}>
-                    <a className='flex items-center justify-between' href="#">
+                    <Link onClick={()=> setNavActive(null)} className='flex items-center justify-between' to="/result">
                         <div className='flex gap-3 text-lg items-center'>
                             <RiArticleLine />Results
                         </div>
                         <span>0</span>
-                    </a>
+                    </Link>
                 </li>
                 <li className={` ${active == 'idea'? 'active':''} py-2 px-3 rounded-xl hover:bg-[#F6F8F8]`} onClick={()=> setActive('idea')}>
-                    <a className='flex items-center justify-between' href="#">
+                    <a onClick={()=> setNavActive(null)} className='flex items-center justify-between' href="#">
                         <div className='flex gap-3 text-lg items-center'>
                             <RiLightbulbLine />Ideas
                         </div>
