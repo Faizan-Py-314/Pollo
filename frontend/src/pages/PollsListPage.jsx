@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { RiTimerLine, RiListRadio, RiRadioButtonLine, RiGroupLine, RiChat1Line } from '@remixicon/react'
-import { pollData } from '../api'
+import { pollsList } from '../api'
 import { useMediaQuery } from 'react-responsive';
 
 import Sidebar from '../components/Sidebar'
@@ -26,7 +26,7 @@ const PollsListPage = () => {
 
   useEffect(() => {
     const getPoll = async () => {
-      const data = await pollData();
+      const data = await pollsList();
       setPolls(data)
     }
     getPoll()
@@ -100,7 +100,7 @@ const PollsListPage = () => {
                   <div className='flex-1 w-0 flex justify-center items-center'>
                     <span className='flex gap-1 items-center lg:text-sm bg-green-200 text-xs p-1 lg:p-1.5 rounded-sm lg:rounded-md'>
                       <span className='hidden lg:block'><RiGroupLine size={15} /></span>
-                      {`12${poll.votes.length}`}
+                      {`${poll.options.reduce((sum, option) => sum + option.votes.length, 0)}`}
                     </span>
                   </div>
                   <div className='flex-1 w-0 flex justify-center items-center'>
@@ -112,7 +112,7 @@ const PollsListPage = () => {
                   <div className='flex-1 w-0  justify-center items-center hidden xl:flex'>
                     <span className='gap-2 items-center lg:rounded-md hidden md:flex'><span>
                       <RiChat1Line />
-                    </span>{poll.options.length}</span>
+                    </span>{poll.comments.length}</span>
                   </div>
                 </div>
               ))}
