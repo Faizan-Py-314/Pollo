@@ -35,6 +35,16 @@ def get_polls(db: Annotated[Session, Depends(get_db)]):
 
     return polls
 
+@app.get("/api/poll/{poll_id}", response_model=PollResponse)
+def get_poll(poll_id: int, db: Annotated[Session, Depends(get_db)]):
+    result = db.execute(select(models.Poll).where(models.Poll.id == poll_id))
+    poll = result.scalars().first()
+
+    if not poll:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Poll not Found")
+
+    return poll
+
 origins = [
     'http://localhost:5173',
     'http://192.168.100.31:5173',
