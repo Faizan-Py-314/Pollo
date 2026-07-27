@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
 import { RiSendInsLine } from '@remixicon/react'
@@ -10,9 +11,11 @@ const PollPage = () => {
     const [selectedPoll, setSetselectedPoll] = useState(null)
     const [poll, setPoll] = useState(null)
 
+    const { id } = useParams();
+
     useEffect(()=> {
         const pollData = async () => {
-            const data = await FetchPoll(1)
+            const data = await FetchPoll(id)
             setPoll(data)
         }
         pollData()

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { RiTimerLine, RiListRadio, RiRadioButtonLine, RiGroupLine, RiChat1Line } from '@remixicon/react'
 import { pollsList } from '../api'
 import { useMediaQuery } from 'react-responsive';
+import { useNavigate } from 'react-router-dom'
 
 import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
@@ -10,6 +11,8 @@ const PollsListPage = () => {
   const [navActive, setNavActive] = useState(null)
   const [polls, setPolls] = useState([])
   const [DeviceType, setDeviceType] = useState('')
+
+  const navigate = useNavigate()
 
   const isScreenGreaterThan600 = useMediaQuery({ query: '(min-width: 600px)' })
   const isScreenGreaterThan1600 = useMediaQuery({ query: '(min-width: 1600px)' })
@@ -84,7 +87,7 @@ const PollsListPage = () => {
               </div>
 
               {polls.map((poll, index) => (
-                <div key={poll.id} className='bg-[#FFFFFF] hover:bg-gray-100 cursor-pointer w-full h-12 shadow-md rounded-md flex items-center text-sm p-4 justify-between text-start md:text-base lg:text-lg md:p-6 lg:p-8 lg:px-12 lg:pr-20'>
+                <div onClick={()=> navigate(`/poll/${poll.id}`)} key={poll.id} className='bg-[#FFFFFF] hover:bg-gray-100 cursor-pointer w-full h-12 shadow-md rounded-md flex items-center text-sm p-4 justify-between text-start md:text-base lg:text-lg md:p-6 lg:p-8 lg:px-12 lg:pr-20'>
                   <div className='flex-1 w-0 justify-center items-center hidden xl:flex'>
                     <span className='px-1 text-base  rounded-full'>{index + 1}</span>
                   </div>
