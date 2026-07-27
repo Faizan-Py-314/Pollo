@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// const API_URL = "http://192.168.100.31:8000";
-const API_URL = "http://0.0.0.0:8000";
+const API_URL = "http://192.168.100.31:8000";
+// const API_URL = "http://0.0.0.0:8000";
 
 const pollData = async () => {
     try{
