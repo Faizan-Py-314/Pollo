@@ -6,6 +6,7 @@ import { RiSendInsLine } from '@remixicon/react'
 
 const PollPage = () => {
     const [navActive, setNavActive] = useState(null)
+    const [selectedPoll, setSetselectedPoll] = useState(null)
 
     return (
         <>
@@ -22,21 +23,21 @@ const PollPage = () => {
                                 <p className='text-sm xl:text-base xl:mt-2'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia sequi obcaecati nisi quidem</p>
                                 <div className=' shadow-lg p-4 flex flex-col rounded-md gap-3 mt-2 xl:mt-5 xl:p-6 xl:gap-4 bg-white'>
                                     <span className='text-sm font-bold -my-2 xl:text-base xl:-mb-1'>Options</span>
-                                    <div className='w-full bg-amber-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3'>
+                                    <div onClick={()=> {if (selectedPoll == 1){setSetselectedPoll(null)} else {setSetselectedPoll(1)}}} className='w-full cursor-pointer bg-amber-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3'>
                                         <div className='w-4 h-4 border border-amber-300 rounded-full flex items-center justify-center xl:w-5 xl:h-5 xl:border-2'>
-                                            <div className='w-2.5 h-2.5 rounded-full bg-amber-300 xl:w-3 xl:h-3'></div>
+                                            <div className={` ${selectedPoll == 1? 'flex':'hidden'} w-2.5 h-2.5 rounded-full bg-amber-300 xl:w-3 xl:h-3`}></div>
                                         </div>
                                         <p className='text-sm xl:text-base'>Option no 1</p>
                                     </div>
-                                    <div className='w-full bg-cyan-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3'>
+                                    <div onClick={()=> {if (selectedPoll == 2){setSetselectedPoll(null)} else {setSetselectedPoll(2)}}} className='w-full cursor-pointer bg-cyan-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3'>
                                         <div className='w-4 h-4 border border-cyan-300 rounded-full flex items-center justify-center xl:w-5 xl:h-5 xl:border-2'>
-                                            <div className='w-2.5 h-2.5 rounded-full bg-cyan-300 xl:w-3 xl:h-3'></div>
+                                            <div className={` ${selectedPoll == 2? 'flex':'hidden'} w-2.5 h-2.5 rounded-full bg-cyan-300 xl:w-3 xl:h-3`}></div>
                                         </div>
                                         <p className='text-sm xl:text-base'>Option no 1</p>
                                     </div>
-                                    <div className='w-full bg-emerald-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3'>
+                                    <div onClick={()=> {if (selectedPoll == 3){setSetselectedPoll(null)} else {setSetselectedPoll(3)}}} className='w-full cursor-pointer bg-emerald-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3'>
                                         <div className='w-4 h-4 border border-emerald-300 rounded-full flex items-center justify-center xl:w-5 xl:h-5 xl:border-2'>
-                                            <div className='w-2.5 h-2.5 rounded-full bg-emerald-300 xl:w-3 xl:h-3'></div>
+                                            <div className={` ${selectedPoll == 3? 'flex':'hidden'} w-2.5 h-2.5 rounded-full bg-emerald-300 xl:w-3 xl:h-3`}></div>
                                         </div>
                                         <p className='text-sm xl:text-base'>Option no 1</p>
                                     </div>
@@ -50,16 +51,16 @@ const PollPage = () => {
                                     <div className='ml-2 flex flex-col gap-3 xl:gap-5'>
                                         <div className='poll flex items-center gap-2'>
                                             <div className='w-3 h-3 border border-amber-300 rounded-full flex items-center justify-center xl:w-4 xl:h-4'>
-                                                <div className='w-2 h-2 rounded-full bg-amber-300 xl:w-2.5 xl:h-2.5'></div>
+                                                <div className={` ${selectedPoll == 1? 'block':'hidden'} w-2 h-2 rounded-full bg-amber-300 xl:w-2.5 xl:h-2.5`}></div>
                                             </div>
                                             <div className='w-[82%] h-3 bg-amber-100 rounded-2xl sm:w-[90%] xl:h-4'>
-                                                <div className='bg-amber-300 h-full w-[50%] rounded-2xl'></div>
+                                                <div className=' bg-amber-300 h-full w-[50%] rounded-2xl'></div>
                                             </div>
                                             <span className='text-xs w-1/15'>33</span>
                                         </div>
                                         <div className='poll flex items-center gap-2'>
                                             <div className='w-3 h-3 border border-cyan-300 rounded-full flex items-center justify-center xl:w-4 xl:h-4'>
-                                                <div className='w-2 h-2 rounded-full bg-cyan-300 xl:w-2.5 xl:h-2.5'></div>
+                                                <div className={` ${selectedPoll == 2? 'block':'hidden'} w-2 h-2 rounded-full bg-cyan-300 xl:w-2.5 xl:h-2.5`}></div>
                                             </div>
                                             <div className='w-[82%] h-3 bg-cyan-100 rounded-2xl sm:w-[90%] xl:h-4'>
                                                 <div className='bg-cyan-300 h-full w-[50%] rounded-2xl'></div>
@@ -68,7 +69,7 @@ const PollPage = () => {
                                         </div>
                                         <div className='poll flex items-center gap-2'>
                                             <div className='w-3 h-3 border border-emerald-300 rounded-full flex items-center justify-center xl:w-4 xl:h-4'>
-                                                <div className='w-2 h-2 rounded-full bg-emerald-300 xl:w-2.5 xl:h-2.5'></div>
+                                                <div className={` ${selectedPoll == 3? 'block':'hidden'} w-2 h-2 rounded-full bg-emerald-300 xl:w-2.5 xl:h-2.5`}></div>
                                             </div>
                                             <div className='w-[82%] h-3 bg-emerald-100 rounded-2xl sm:w-[90%] xl:h-4'>
                                                 <div className='bg-emerald-300 h-full w-[50%] rounded-2xl'></div>
