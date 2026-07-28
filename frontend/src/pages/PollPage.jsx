@@ -20,8 +20,6 @@ const PollPage = () => {
         pollData()
     }, [])
 
-    const colors = ['amber', 'cyan', 'emerald', 'indigo', 'red', 'orange', 'yellow', 'lime', 'green', 'teal', 'sky', 'blue', 'violet', 'purple', 'fuchsia', 'pink', 'rose', 'slate', 'zinc', 'stone'
-    ];
 
     const formatTime = (isoString) => {
         if (!isoString) return '00:00:00';
@@ -55,9 +53,9 @@ const PollPage = () => {
                         <div className=' shadow-lg p-4 flex flex-col rounded-md gap-3 mt-2 xl:mt-5 xl:p-6 xl:gap-4 bg-white'>
                             <span className='text-sm font-bold -my-2 xl:text-base xl:-mb-1'>Options</span>
                             {poll.options.map((option, index) => (
-                                <div key={index} onClick={() => { if (selectedPoll == index) { setSetselectedPoll(null) } else { setSetselectedPoll(index) } }} className={`w-full cursor-pointer bg-${colors[index]}-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3`}>
-                                    <div className={`w-4 h-4 border border-${colors[index]}-300 rounded-full flex items-center justify-center xl:w-5 xl:h-5 xl:border-2`}>
-                                        <div className={` ${selectedPoll == index ? 'flex' : 'hidden'} w-2.5 h-2.5 rounded-full bg-${colors[index]}-300 xl:w-3 xl:h-3`}></div>
+                                <div key={index} onClick={() => { if (selectedPoll == index) { setSetselectedPoll(null) } else { setSetselectedPoll(index) } }} className={`w-full cursor-pointer bg-${option.color}-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3`}>
+                                    <div className={`w-4 h-4 border border-${option.color}-300 rounded-full flex items-center justify-center xl:w-5 xl:h-5 xl:border-2`}>
+                                        <div className={` ${selectedPoll == index ? 'flex' : 'hidden'} w-2.5 h-2.5 rounded-full bg-${option.color}-300 xl:w-3 xl:h-3`}></div>
                                     </div>
                                     <p className='text-sm xl:text-base'>{option.title}</p>
                                 </div>
@@ -75,11 +73,11 @@ const PollPage = () => {
                             <div className='ml-2 flex flex-col gap-3 xl:gap-5'>
                                 {poll.options.map((option, index) => (
                                     <div key={index} className='poll flex items-center gap-2'>
-                                        <div className={`w-3 h-3 border border-${colors[index]}-300 rounded-full flex items-center justify-center xl:w-4 xl:h-4`}>
-                                            <div className={` ${selectedPoll == index ? 'block' : 'hidden'} w-2 h-2 rounded-full bg-${colors[index]}-300 xl:w-2.5 xl:h-2.5`}></div>
+                                        <div className={`w-3 h-3 border border-${option.color}-300 rounded-full flex items-center justify-center xl:w-4 xl:h-4`}>
+                                            <div className={` ${selectedPoll == index ? 'block' : 'hidden'} w-2 h-2 rounded-full bg-${option.color}-300 xl:w-2.5 xl:h-2.5`}></div>
                                         </div>
-                                        <div className={`w-[82%] h-3 bg-${colors[index]}-100 rounded-2xl sm:w-[90%] xl:h-4`}>
-                                            <div style={{ width: `${(option.votes.length / totalVotes) * 100}%` }} className={`bg-${colors[index]}-300 h-full rounded-2xl`}></div>
+                                        <div className={`w-[82%] h-3 bg-${option.color}-100 rounded-2xl sm:w-[90%] xl:h-4`}>
+                                            <div style={{ width: `${(option.votes.length / totalVotes) * 100}%` }} className={`bg-${option.color}-300 h-full rounded-2xl`}></div>
                                         </div>
                                         <span className='text-xs w-1/15'>{option.votes.length}</span>
                                     </div>

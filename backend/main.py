@@ -6,18 +6,48 @@ from sqlalchemy.orm import Session
 from datebase import get_db, Base, engine
 import models
 from schemas import PollCreate, PollResponse
+import random
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+
+# A predefined list of clean, distinct UI colors
+PRESET_COLORS = [
+    'amber', 'cyan', 'emerald', 'indigo', 'red', 'orange', 'yellow', 'lime', 
+    'green', 'teal', 'sky', 'blue', 'violet', 'purple', 'fuchsia', 'pink', 
+    'rose', 'slate', 'zinc', 'stone'
+  ]
+
+def generate_unique_colors(count: int) -> list[str]:
+    # If the user provides more options than preset colors, generate extra hex codes
+    if count <= len(PRESET_COLORS):
+        return random.sample(PRESET_COLORS, count)
+    
+    # Fallback to completely unique random hex colors
+    colors = set()
+    while len(colors) < count:
+        random_hex = f"#{random.randint(0, 0xFFFFFF):06x}"
+        colors.add(random_hex)
+    return list(colors)
+
+
 @app.post('/api/poll', response_model=PollResponse, status_code=status.HTTP_201_CREATED)
 def create_poll(poll: PollCreate, db: Annotated[Session, Depends(get_db)]):
+
+    colors = generate_unique_colors(len(poll.options))
+    
+    processed_options = []
+    for option, color in zip(poll.options, colors):
+        option_dict = option.model_dump() 
+        option_dict["color"] = color
+        processed_options.append(option_dict)
 
     new_poll = models.Poll(
         title=poll.title,
         description=poll.description,
-        options=[opt.model_dump() for opt in poll.options],
+        options=processed_options,
         comments=[comm.model_dump() for comm in poll.comments],
         finished_at=poll.finished_at
     )

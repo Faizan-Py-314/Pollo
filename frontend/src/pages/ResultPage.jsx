@@ -40,11 +40,6 @@ const ResultPage = () => {
     pollData()
   }, [])
 
-  const colors = [
-    'amber', 'cyan', 'emerald', 'indigo', 'red', 'orange', 'yellow', 'lime', 
-    'green', 'teal', 'sky', 'blue', 'violet', 'purple', 'fuchsia', 'pink', 
-    'rose', 'slate', 'zinc', 'stone'
-  ];
 
   if (!polls) {
     return (
@@ -64,7 +59,7 @@ const ResultPage = () => {
       <div className='px-4 py-2 lg:px-5 lg:py-3 lg:ml-4'>
         <h1 className='text-2xl font-bold lg:text-3xl mb-3'>Result</h1>
 
-        <div className='flex gap-3 xl:gap-5 container h-[82vh] overflow-y-auto overflow-x-hidden items-start'>
+        <div className='flex gap-3 container h-[82vh] overflow-y-auto overflow-x-hidden items-start'>
           {columns.map((columnPolls, colIndex) => (
      
             <div key={colIndex} className='flex flex-col gap-3 xl:gap-5 flex-1 w-full'>
@@ -87,20 +82,19 @@ const ResultPage = () => {
                       {poll.options.map((option, index) => {
                         const optionVotes = option.votes.length;
                         const percentage = totalVotes > 0 ? (optionVotes / totalVotes) * 100 : 0;
-                        const color = colors[index % colors.length];
 
                         return (
                           <div key={index} className='poll flex items-center gap-2'>
-                            <div className={`w-3 h-3 border border-${color}-300 rounded-full flex items-center justify-center lg:w-4 lg:h-4`}>
-                              <div className={`w-2 h-2 rounded-full bg-${color}-300 lg:w-2.5 lg:h-2.5`}></div>
+                            <div className={`w-3 h-3 border border-${option.color}-300 rounded-full flex items-center justify-center lg:w-4 lg:h-4`}>
+                              <div className={`w-2 h-2 rounded-full bg-${option.color}-300 lg:w-2.5 lg:h-2.5`}></div>
                             </div>
-                            <div className={`w-[82%] h-3 bg-${color}-100 rounded-2xl sm:w-[90%] lg:h-4 ${clickOnResult === count ? 'relative p-3 flex items-center' : ''}`}>
+                            <div className={`w-[82%] h-3 bg-${option.color}-100 rounded-2xl sm:w-[90%] lg:h-4 ${clickOnResult === count ? 'relative p-3 flex items-center' : ''}`}>
                               <span className={`${clickOnResult === count ? '' : 'hidden'} text-xs absolute left-2 z-10 font-medium`}>
                                 {option.title}
                               </span>
                               <div 
-                                style={{ width: `${percentage}%` }} 
-                                className={`bg-${color}-300 h-full rounded-2xl transition-all duration-300`}
+                                style={{ width: `${percentage}%` }}
+                                className={`bg-${option.color}-300 h-full rounded-2xl transition-all duration-300`}
                               ></div>
                             </div>
                             <span className='text-xs w-1/15'>{optionVotes}</span>
