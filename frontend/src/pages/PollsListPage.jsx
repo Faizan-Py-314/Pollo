@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom'
 
 import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
+import PollTimer from '../components/PollTimer';
 
 const PollsListPage = () => {
+  const [pollsData, setPollsData] = useState([])
   const [polls, setPolls] = useState([])
   const [DeviceType, setDeviceType] = useState('')
 
@@ -29,7 +31,7 @@ const PollsListPage = () => {
   useEffect(() => {
     const getPoll = async () => {
       const data = await pollsList();
-      setPolls(data)
+      setPollsData(data)
     }
     getPoll()
   }, [])
@@ -52,6 +54,20 @@ const PollsListPage = () => {
 
     return `${hours}:${minutes}:${seconds}`;
   };
+
+  useEffect(() => {
+    if (!pollsData || pollsData.length === 0) return;
+
+    const now = Date.now();
+    
+    const activePolls = pollsData.filter((poll) => {
+      const end = new Date(poll.finished_at).getTime();
+      return end - now > 0;
+    });
+
+    setPolls(activePolls);
+  }, [pollsData]);
+
 
 
   return (
@@ -92,7 +108,7 @@ const PollsListPage = () => {
               <div className='flex-2 w-0 flex justify-center items-center'>
                 <span className='flex gap-2 items-center'>
                   <span className='hidden lg:block'><RiTimerLine /></span>
-                  {formatTime(poll.finished_at)}
+                  {<PollTimer createdAT={poll.created_at} finishedAt={poll.finished_at} />}
                 </span>
               </div>
               <div className='flex-1 w-0 flex justify-center items-center'>

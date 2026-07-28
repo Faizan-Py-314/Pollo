@@ -27,17 +27,18 @@ const useColumnCount = () => {
 
 const ResultPage = () => {
   const [navActive, setNavActive] = useState(null)
-  const [polls, setPolls] = useState(null)
+  const [pollsData, setPollsData] = useState([])
+  const [polls, setPolls] = useState([])
   const [clickOnResult, setClickOnResult] = useState(null)
   
   const numCols = useColumnCount();
 
   useEffect(() => {
-    const pollData = async () => {
+    const getpolls = async () => {
       const data = await pollsList()
-      setPolls(data)
+      setPollsData(data)
     }
-    pollData()
+    getpolls()
   }, [])
 
 
@@ -53,6 +54,20 @@ const ResultPage = () => {
   polls.forEach((poll, idx) => {
     columns[idx % numCols].push({ ...poll, originalIndex: idx });
   });
+
+  useEffect(() => {
+    if (!pollsData || pollsData.length === 0) return;
+
+    const now = Date.now();
+    
+    const activePolls = pollsData.filter((poll) => {
+      const end = new Date(poll.finished_at).getTime();
+      return end - now <= 0;
+    });
+
+    setPolls(activePolls);
+  }, [pollsData]);
+  
 
   return (
     <>

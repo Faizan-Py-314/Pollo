@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
 import { RiSendInsLine } from '@remixicon/react'
 import { FetchPoll } from '../api'
+import PollTimer from '../components/PollTimer'
 
 
 const PollPage = () => {
@@ -67,7 +68,7 @@ const PollPage = () => {
                         <div className='shadow-lg rounded-md p-2 flex flex-col gap-3 mt-3 xl:mt-7 xl:p-4 bg-white'>
                             <div className='flex text-xs justify-between px-2 mt-1 xl:text-base xl:mb-2'>
                                 <span>Options: {poll.options.length}</span>
-                                <span>Timer: {formatTime(poll.finished_at)}</span>
+                                <span>Timer: {<PollTimer createdAT={poll.created_at} finishedAt={poll.finished_at} />}</span>
                             </div>
 
                             <div className='ml-2 flex flex-col gap-3 xl:gap-5'>
