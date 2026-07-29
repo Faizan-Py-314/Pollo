@@ -5,7 +5,7 @@ const API_URL = "http://192.168.100.31:8000";
 
 const pollsList = async () => {
     try{
-        const response = await axios.get(`${API_URL}/api/poll`);
+        const response = await axios.get(`${API_URL}/api/polls`);
         return response.data;
     } catch (error) {
         console.error('Fetch poll data error', error)
@@ -15,7 +15,7 @@ const pollsList = async () => {
 
 const FetchPoll = async (id) => {
     try {
-        const response = await axios.get(`${API_URL}/api/poll/${id}`)
+        const response = await axios.get(`${API_URL}/api/polls/${id}`)
         return response.data
         console.log(data);
         
