@@ -6,6 +6,8 @@ import Topbar from './components/Topbar'
 import PollListPage from './pages/PollsListPage'
 import PollPage from './pages/PollPage'
 import ResultPage from './pages/ResultPage'
+import RegisterPage from './pages/RegisterPage'
+import LoginPage from './pages/LoginPage'
 
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
             <Route path='/poll' element={<PollListPage />} />
             <Route path='/poll/:id' element={<PollPage />} />
             <Route path='/result' element={<ResultPage />} />
+            <Route path='/register' element={<RegisterPage />}/>
+            <Route path='/login' element={<LoginPage />}/>
           </Routes>
         </div>
       </div>
