@@ -3,6 +3,8 @@ import axios from 'axios'
 const API_URL = "http://192.168.100.31:8000";
 // const API_URL = "http://0.0.0.0:8000";
 
+const WS_URL = API_URL.replace(/^http/, 'ws')
+
 const loginUser = async (credentials) => {
     try {
         const params = new URLSearchParams();
@@ -68,4 +70,30 @@ const FetchPoll = async (id) => {
     }
 }
 
-export { loginUser, registerUser, fetchUserInfo, pollsList, FetchPoll }
+const votePoll = async (pollId, optionIndex, token) => {
+    try {
+        const response = await axios.post(`${API_URL}/api/polls/${pollId}/vote`, 
+            {option_index: optionIndex},
+            {headers: {Authorization: `Bearer ${token}`}}
+        )
+        return response.data
+    } catch (error) {
+        console.error("Failed to submit vote:", error);
+        throw error
+    }
+}
+
+const commentPoll = async (pollId, pollComment, token) => {
+    try {
+        const response = await axios.post(`${API_URL}/api/polls/${pollId}/comments`, 
+            {comment: pollComment},
+            { headers: {Authorization: `Bearer ${token}`}}
+        )
+    } catch (error) {
+        console.error("Failed to comment", error);
+        throw error
+    }
+}
+
+export { loginUser, registerUser, fetchUserInfo, pollsList, FetchPoll, votePoll, WS_URL, commentPoll }
+

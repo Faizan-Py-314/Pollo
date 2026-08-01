@@ -12,6 +12,7 @@ app.include_router(users.router, prefix='/api/users', tags=['users'])
 
 origins = [
     'http://localhost:5173',
+    "http://127.0.0.1:5173",
     'http://192.168.100.31:5173',
 ]
 

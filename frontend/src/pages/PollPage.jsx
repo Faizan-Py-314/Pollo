@@ -1,25 +1,94 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
 import { RiSendInsLine } from '@remixicon/react'
-import { FetchPoll } from '../api'
+import { FetchPoll, votePoll, WS_URL, commentPoll } from '../api'
 import PollTimer from '../components/PollTimer'
+import { AuthContext } from '../context/AuthContext'
 
 
 const PollPage = () => {
     const [selectedPoll, setSetselectedPoll] = useState(null)
     const [poll, setPoll] = useState(null)
+    const [commentForm, setCommentForm] = useState({comment: ''})
 
     const { id } = useParams();
+    const { user } = useContext(AuthContext)
 
     useEffect(() => {
+        let isMounted = true;
+
         const pollData = async () => {
             const data = await FetchPoll(id)
             setPoll(data)
         }
         pollData()
-    }, [])
+
+        const ws = new WebSocket(`${WS_URL}/api/polls/ws/${id}`)
+
+        ws.onopen = () => {
+            console.log("Connected to poll");
+        }
+
+        ws.onmessage = (event) => {
+            const updatePoll = JSON.parse(event.data)
+            setPoll(updatePoll)
+        }
+
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error)
+        }
+
+        return () => {
+            isMounted = false;
+            
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.close();
+            } else if (ws.readyState === WebSocket.CONNECTING) {
+                // Wait for handshake to finish before closing to prevent StrictMode warnings
+                ws.onopen = () => {
+                    ws.close();
+                };
+            }
+        };
+    }, [id])
+
+    const handleOptionClick = async (index) => {
+        const token = localStorage.getItem('token')
+
+        if (!token){
+            alert('Please login to vote')
+            return
+        }
+
+        setSetselectedPoll(selectedPoll === index? null: index);
+
+        try {
+            await votePoll(id, index, token)
+        } catch (error) {
+            console.error("vote action failed", error);
+        }
+    }
+
+    const handleComment = async (e) => {
+        e.preventDefault()
+    
+        const token = localStorage.getItem('token')
+
+        if (!token){
+            alert('Please login to comment')
+            return
+        }
+
+        try{
+            await commentPoll(id, commentForm.comment, token)
+            setCommentForm({comment: ''})
+        } catch (error) {
+            console.error("Failed action comment", error);
+        }
+
+    }
 
 
     const formatTime = (isoString) => {
@@ -54,9 +123,9 @@ const PollPage = () => {
                         <div className=' shadow-lg p-4 flex flex-col rounded-md gap-3 mt-2 xl:mt-5 xl:p-6 xl:gap-4 bg-white'>
                             <span className='text-sm font-bold -my-2 xl:text-base xl:-mb-1'>Options</span>
                             {poll.options.map((option, index) => (
-                                <div key={index} onClick={() => { if (selectedPoll == index) { setSetselectedPoll(null) } else { setSetselectedPoll(index) } }} className={`w-full cursor-pointer bg-${option.color}-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3`}>
+                                <div key={index} onClick={() => handleOptionClick(index)} className={`w-full cursor-pointer bg-${option.color}-100 rounded-md p-2 flex gap-2 items-center xl:p-3 xl:px-4 xl:gap-3`}>
                                     <div className={`w-4 h-4 border border-${option.color}-300 rounded-full flex items-center justify-center xl:w-5 xl:h-5 xl:border-2`}>
-                                        <div className={` ${selectedPoll == index ? 'flex' : 'hidden'} w-2.5 h-2.5 rounded-full bg-${option.color}-300 xl:w-3 xl:h-3`}></div>
+                                        <div className={` ${user && option.votes?.includes(user.id) ? 'flex' : 'hidden'} w-2.5 h-2.5 rounded-full bg-${option.color}-300 xl:w-3 xl:h-3`}></div>
                                     </div>
                                     <p className='text-sm xl:text-base'>{option.title}</p>
                                 </div>
@@ -75,10 +144,10 @@ const PollPage = () => {
                                 {poll.options.map((option, index) => (
                                     <div key={index} className='poll flex items-center gap-2'>
                                         <div className={`w-3 h-3 border border-${option.color}-300 rounded-full flex items-center justify-center xl:w-4 xl:h-4`}>
-                                            <div className={` ${selectedPoll == index ? 'block' : 'hidden'} w-2 h-2 rounded-full bg-${option.color}-300 xl:w-2.5 xl:h-2.5`}></div>
+                                            <div className={` ${user && option.votes?.includes(user.id) ? 'block' : 'hidden'} w-2 h-2 rounded-full bg-${option.color}-300 xl:w-2.5 xl:h-2.5`}></div>
                                         </div>
-                                        <div className={`w-[82%] h-3 bg-${option.color}-100 rounded-2xl sm:w-[90%] xl:h-4`}>
-                                            <div style={{ width: `${(option.votes.length / totalVotes) * 100}%` }} className={`bg-${option.color}-300 h-full rounded-2xl`}></div>
+                                        <div className={`w-[82%] transition h-3 bg-${option.color}-100 rounded-2xl sm:w-[90%] xl:h-4`}>
+                                            <div style={{ width: `${totalVotes > 0 ? (option.votes.length / totalVotes) * 100 : 0}%` }} className={`bg-${option.color}-300 h-full rounded-2xl duration-300 ease-in-out`}></div>
                                         </div>
                                         <span className='text-xs w-1/15'>{option.votes.length}</span>
                                     </div>
@@ -107,10 +176,10 @@ const PollPage = () => {
 
                         </div>
                         <div className='w-full flex justify-center'>
-                            <div className='absolute bottom-3 text-sm border w-[90%] rounded-lg py-2 px-4 flex justify-between items-center 2xl:bottom-5 2xl:text-base'>
-                                <input className=' outline-none w-[85%]' type="text" placeholder='Comment' />
-                                <RiSendInsLine size={20} />
-                            </div>
+                            <form onSubmit={handleComment} className='absolute bottom-3 text-sm border w-[90%] rounded-lg py-2 px-4 flex justify-between items-center 2xl:bottom-5 2xl:text-base'>
+                                <input onChange={(e)=>  setCommentForm({...commentForm, [e.target.name]: e.target.value})} className=' outline-none w-[85%]' name='comment' value={commentForm.comment} type="text" placeholder='Comment' />
+                                <button className='cursor-pointer' type='submit'><RiSendInsLine size={20} /></button>
+                            </form>
                         </div>
                     </div>
                 </div>

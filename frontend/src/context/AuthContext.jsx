@@ -7,13 +7,28 @@ const AuthContext = createContext({})
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'))
   const [user, setUser] = useState(null);
+const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
 
   useEffect(()=> {
     if (token) {
       const getUser = async () => {
-        const user = await fetchUserInfo(token)
-        setUser(user)
+        if (!token) {
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+        try {
+          const user = await fetchUserInfo(token)
+          setUser(user)
+        } catch (error) {
+          console.warn("Session expired or invalid token:", error.response?.status);
+          // Clear invalid token from storage
+          localStorage.removeItem("token");
+          setUser(null);  
+        } finally {
+          setLoading(false);
+        }
       }
       getUser()
     }

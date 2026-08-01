@@ -20,19 +20,24 @@ class Token(BaseModel):
 
 class OptionsBase(BaseModel):
     title: str
-    votes: list[int]
 
 class OptionsResponse(OptionsBase):
+    votes: list[int] = Field(default=[])
     color: str
 
-class Comments(BaseModel):
-    user: str
+class VoteRequest(BaseModel):
+    option_index: int
+
+class CommentsBase(BaseModel):
     comment: str
+
+class CommentsCreate(CommentsBase):
+    user: str
 
 class PollBase(BaseModel):
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1)
-    comments: list[Comments]
+    comments: list[CommentsCreate]
     finished_at: datetime
 
 class PollCreate(PollBase):
