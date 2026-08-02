@@ -40,7 +40,6 @@ class CommentDelete(BaseModel):
 class PollBase(BaseModel):
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1)
-    comments: list[CommentsCreate]
     finished_at: datetime
 
 class PollCreate(PollBase):
@@ -52,5 +51,6 @@ class PollResponse(PollBase):
 
     id: int
     options: list[OptionsResponse]
+    comments: list[CommentsCreate] = Field(default=[])
     created_at: datetime
 

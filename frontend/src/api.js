@@ -48,6 +48,18 @@ const fetchUserInfo = async (token) => {
     }
 }
 
+const createPoll = async (pollTitle, pollDescription, pollFinished, pollOptions) => {
+    try {
+        const response = await axios.post(`${API_URL}/api/polls`, 
+            {title: pollTitle, description: pollDescription, finished_at: pollFinished, options: pollOptions}
+        )
+        return response.data
+    } catch (error) {
+        console.error('Falied to create poll', error);
+        throw error
+    }
+}
+
 const pollsList = async () => {
     try {
         const response = await axios.get(`${API_URL}/api/polls`);
@@ -109,5 +121,5 @@ const commentDelete = async (pollId, commentIndex, token) => {
     }
 }
 
-export { loginUser, registerUser, fetchUserInfo, pollsList, FetchPoll, votePoll, WS_URL, commentPoll, commentDelete }
+export { loginUser, registerUser, fetchUserInfo, pollsList, FetchPoll, votePoll, WS_URL, commentPoll, commentDelete, createPoll }
 

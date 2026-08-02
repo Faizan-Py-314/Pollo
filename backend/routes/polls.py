@@ -27,7 +27,6 @@ def create_poll(poll: PollCreate, db: Annotated[Session, Depends(get_db)]):
         title=poll.title,
         description=poll.description,
         options=processed_options,
-        comments=[comm.model_dump() for comm in poll.comments],
         finished_at=poll.finished_at
     )
 
