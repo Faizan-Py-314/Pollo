@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { RiBarChartHorizontalLine, RiDashboardHorizontalFill, RiArticleLine, RiLightbulbLine, RiPaletteLine, RiSunLine, RiMoonLine, RiCloseLine, RiSettings4Line} from '@remixicon/react'
+import { RiBarChartHorizontalLine, RiDashboardHorizontalFill, RiArticleLine, RiFunctionAddFill, RiPaletteLine, RiSunLine, RiMoonLine, RiCloseLine, RiSettings4Line} from '@remixicon/react'
 
 const Sidebar = ({ navActive, setNavActive }) => {
-    const [active, setActive] = useState('dashboard')
+    const [active, setActive] = useState('polls')
     const [theme, setTheme] = useState(localStorage.getItem('theme')? localStorage.getItem('theme'): 'light')
 
     const toggleTheme = () => {
@@ -22,13 +22,6 @@ const Sidebar = ({ navActive, setNavActive }) => {
             </div>
 
             <ul className='mt-10 flex flex-col gap-2 relative h-[88%] [@media(min-height:800px)]:h-[90%]'>
-                <li className={` ${active == 'dashboard'? 'active':''} py-2 px-3 rounded-xl hover:bg-[#F6F8F8]`} onClick={()=> setActive('dashboard')}>
-                    <a onClick={()=> setNavActive(null)} href="#">
-                        <div className='flex gap-3 text-lg items-center'>
-                            <RiDashboardHorizontalFill />Dashboard
-                        </div>
-                    </a>
-                </li>
                 <li className={` ${active == 'polls'? 'active': ''} py-2 px-3 rounded-xl hover:bg-[#F6F8F8]`} onClick={()=> setActive('polls')}>
                     <Link onClick={()=> setNavActive(null)} className='flex items-center justify-between' to="/poll">
                         <div className='flex gap-3 text-lg items-center'>
@@ -46,12 +39,11 @@ const Sidebar = ({ navActive, setNavActive }) => {
                     </Link>
                 </li>
                 <li className={` ${active == 'idea'? 'active':''} py-2 px-3 rounded-xl hover:bg-[#F6F8F8]`} onClick={()=> setActive('idea')}>
-                    <a onClick={()=> setNavActive(null)} className='flex items-center justify-between' href="#">
+                    <Link onClick={()=> setNavActive(null)} className='flex items-center justify-between' to="/createpoll">
                         <div className='flex gap-3 text-lg items-center'>
-                            <RiLightbulbLine />Ideas
+                            <RiFunctionAddFill />Create Poll
                         </div>
-                        <span>0</span>
-                    </a>
+                    </Link>
                 </li>
                 <li className='py-2 px-3 rounded-xl hover:bg-[#F6F8F8] lg:hidden' onClick={toggleTheme}>
                     <a className='flex items-center justify-between' href="#">

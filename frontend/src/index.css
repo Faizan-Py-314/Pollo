@@ -11,3 +11,7 @@
   scrollbar-width: none; 
   -ms-overflow-style: none; 
 }
+
+body {
+  background: #F6F8F8;
+}
