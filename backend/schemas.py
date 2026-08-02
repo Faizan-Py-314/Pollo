@@ -34,6 +34,9 @@ class CommentsBase(BaseModel):
 class CommentsCreate(CommentsBase):
     user: str
 
+class CommentDelete(BaseModel):
+    comment_index: int
+
 class PollBase(BaseModel):
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(min_length=1)

@@ -95,5 +95,19 @@ const commentPoll = async (pollId, pollComment, token) => {
     }
 }
 
-export { loginUser, registerUser, fetchUserInfo, pollsList, FetchPoll, votePoll, WS_URL, commentPoll }
+const commentDelete = async (pollId, commentIndex, token) => {
+    try {
+        const response = await axios.delete(`${API_URL}/api/polls/${pollId}/comments/${commentIndex}`, 
+            {
+                headers: {Authorization: `Bearer ${token}`}
+            }
+        )
+        return response.data
+    } catch (error) {
+        console.error("Failed to delete comment", error);
+        throw error
+    }
+}
+
+export { loginUser, registerUser, fetchUserInfo, pollsList, FetchPoll, votePoll, WS_URL, commentPoll, commentDelete }
 

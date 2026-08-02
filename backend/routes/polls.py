@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 from datebase import get_db
 import models
-from schemas import PollCreate, PollResponse, VoteRequest, CommentsBase
+from schemas import PollCreate, PollResponse, VoteRequest, CommentsBase, CommentDelete
 from auth import CurrentUser
 from colors import generate_unique_colors
 from websocket_manager import manager
@@ -114,6 +114,35 @@ async def add_comment(poll_id: int, current_user: CurrentUser, comment: Comments
 
     comments.append({"user": current_user.username, "comment": comment.comment})
 
+    poll.comments = comments
+    flag_modified(poll, 'comments')
+
+    db.commit()
+    db.refresh(poll)
+
+    update_poll_data = PollResponse.model_validate(poll).model_dump(mode='json')
+    await manager.broadcast(poll_id, update_poll_data)
+
+    return poll
+
+@router.delete('/{poll_id}/comments/{comment_index}', response_model=PollResponse)
+async def delete_comment(poll_id: int, current_user: CurrentUser, comment_index: int, db: Annotated[Session, Depends(get_db)]):
+
+    result = db.execute(select(models.Poll).where(models.Poll.id == poll_id))
+    poll = result.scalars().first()
+
+    if not poll:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Poll Not Found")
+
+    comments = poll.comments if poll.comments is not None else []
+
+    if comment_index < 0 or comment_index >= len(comments):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invailed comment index')
+
+    if comments[comment_index]['user'] != current_user.username:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Not Authorized to delete this comment')
+
+    comments.pop(comment_index)
     poll.comments = comments
     flag_modified(poll, 'comments')
 

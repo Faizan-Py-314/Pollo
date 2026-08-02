@@ -2,15 +2,18 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
-import { RiSendInsLine } from '@remixicon/react'
-import { FetchPoll, votePoll, WS_URL, commentPoll } from '../api'
+import { RiSendInsLine, RiMore2Line } from '@remixicon/react'
+import { FetchPoll, votePoll, WS_URL, commentPoll, commentDelete } from '../api'
 import PollTimer from '../components/PollTimer'
 import { AuthContext } from '../context/AuthContext'
+import { useClickOutside } from '../components/useClickOutside'
 
 
 const PollPage = () => {
     const [selectedPoll, setSetselectedPoll] = useState(null)
     const [poll, setPoll] = useState(null)
+    const [activeCommentIndex, setActiveCommentIndex] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
     const [commentForm, setCommentForm] = useState({comment: ''})
 
     const { id } = useParams();
@@ -90,6 +93,23 @@ const PollPage = () => {
 
     }
 
+    const handleDeleteComment = async (index) => {
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+            alert('Please Login to delete comment')
+            return
+        }
+
+        try {
+            await commentDelete(id, index, token)
+            setActiveCommentIndex(null)
+        } catch (error) {
+            console.log("Delete action failed");
+        }
+
+    }
+
 
     const formatTime = (isoString) => {
         if (!isoString) return '00:00:00';
@@ -104,7 +124,8 @@ const PollPage = () => {
         return `${hours}:${minutes}:${seconds}`;
     };
 
-
+    const commentRef = useClickOutside(activeCommentIndex !== null, () => {setActiveCommentIndex(null)})
+    
     if (!poll) {
         return (
             <div className='flex justify-center items-center h-screen bg-[#F6F8F8]'>
@@ -167,7 +188,18 @@ const PollPage = () => {
                         <div className='p-2 flex flex-col gap-3 h-[90%] overflow-auto xl:mt-2 2xl:gap-4.5 2xl:px-4'>
                             {poll.comments.map((comment, index) => (
                                 <div key={index} className='comment text-sm 2xl:text-base'>
-                                    <span className='font-bold'>{comment.user}</span>
+                                    <div className='flex items-center justify-between relative'>
+                                        <span className='font-bold'>{comment.user}</span>
+                                        <div>
+                                        <span onClick={()=> {setActiveCommentIndex(activeCommentIndex === index? null: index)}} className={`cursor-pointer ${user && user.username == comment.user? 'block':'hidden'}`}><RiMore2Line size={13}/></span>
+                                        {activeCommentIndex === index && (
+                                            <div ref={commentRef} className={`flex absolute text-xs right-5 gap-2 bg-gray-100 p-2 rounded-md`}>
+                                                <button onClick={() => handleDeleteComment(index)} className='px-2 py-1 rounded-sm text-white bg-red-400 cursor-pointer'>Delete</button>
+                                            </div>
+                                        )}
+                                        
+                                        </div>
+                                    </div>
                                     <p>{comment.comment}</p>
                                 </div>
                             ))}
